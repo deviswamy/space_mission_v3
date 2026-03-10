@@ -1,0 +1,115 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(~/.bun/bin/bun pm ls)",
+      "Bash(find /Users/devithirumalaiswamy/auto_code/space_mission_v3 -type f \\\\\\(-name *.ts -o -name *.tsx \\\\\\))",
+      "WebSearch"
+    ],
+    "deny": [
+      "Read(./.entire/metadata/**)"
+    ],
+    "ask": [],
+    "additionalDirectories": [
+      "/Users/devithirumalaiswamy/auto_code/space_mission_v3/lisa"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "context7"
+  ],
+  "enabledPlugins": {},
+  "PostToolUse": [
+    {
+      "matcher": "Bash",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash .claude/hooks/quality-gate.sh"
+        },
+        {
+          "type": "command",
+          "command": "bash .claude/hooks/documentation-skill-trigger.sh"
+        }
+      ]
+    },
+    {
+      "matcher": "Task",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "entire hooks claude-code post-task"
+        }
+      ]
+    },
+    {
+      "matcher": "TodoWrite",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "entire hooks claude-code post-todo"
+        }
+      ]
+    }
+  ],
+  "PreToolUse": [
+    {
+      "matcher": "Task",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "entire hooks claude-code pre-task"
+        }
+      ]
+    }
+  ],
+  "SessionEnd": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "entire hooks claude-code session-end"
+        }
+      ]
+    }
+  ],
+  "SessionStart": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "entire hooks claude-code session-start"
+        }
+      ]
+    }
+  ],
+  "Stop": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bun .claude/hooks/quality-gate-stop.ts"
+        },
+        {
+          "type": "command",
+          "command": "entire hooks claude-code stop"
+        }
+      ]
+    }
+  ],
+  "UserPromptSubmit": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "entire hooks claude-code user-prompt-submit"
+        }
+      ]
+    }
+  ],
+  "bypassPermissions": true,
+  "defaultMode": "default"
+}
