@@ -2,10 +2,12 @@
   "name": "@mission/server",
   "private": true,
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:seed": "bun db/seed.ts"
   },
   "dependencies": {
     "@mission/shared": "workspace:*",
+    "@node-rs/argon2": "^2.0.2",
     "better-auth": "^1.0.0",
     "drizzle-orm": "^0.39.0",
     "express": "^4.21.0",
