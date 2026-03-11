@@ -4,8 +4,6 @@ import { useForm } from "react-hook-form";
 import { useLocation } from "wouter";
 import { ChangePasswordSchema, type ChangePasswordInput } from "../../../shared/contracts";
 import { apiFetch } from "../lib/api";
-import { authClient } from "../lib/auth";
-
 export function ChangePasswordPage() {
   const [, navigate] = useLocation();
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +21,6 @@ export function ChangePasswordPage() {
         method: "POST",
         body: JSON.stringify({ newPassword: data.newPassword }),
       });
-      await authClient.getSession();
       navigate("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to change password");
@@ -52,7 +49,7 @@ export function ChangePasswordPage() {
               <p className="mt-1 text-xs text-red-600">{errors.newPassword.message}</p>
             )}
           </div>
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
           <button
             type="submit"
             disabled={isSubmitting}

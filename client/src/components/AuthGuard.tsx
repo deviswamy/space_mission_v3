@@ -17,7 +17,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
   useEffect(() => {
     if (!isPending && !session) navigate("/login");
     else if (!isPending && user?.mustChangePassword) navigate("/change-password");
-  }, [session, isPending, user, navigate]);
+  }, [session, isPending, navigate]);
 
   if (isPending || !session) return null;
   return <>{children}</>;
