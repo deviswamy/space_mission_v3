@@ -3,15 +3,14 @@
 // Returns 403 if mustChangePassword=true and route is not /auth/change-password.
 
 import type { NextFunction, Request, Response } from "express";
-import type { User } from "../../shared/schema/auth";
 import { AppError } from "../lib/errors";
-import { auth } from "../lib/auth";
+import { auth, type SessionUser } from "../lib/auth";
 
 // Extend Express Request with the authenticated user
 declare global {
   namespace Express {
     interface Request {
-      identity?: User;
+      identity?: SessionUser;
     }
   }
 }
@@ -21,6 +20,13 @@ export async function requireAuth(
   res: Response,
   next: NextFunction,
 ): Promise<void> {
-  // TODO: implement session validation via auth.api.getSession
-  next(new AppError(401, "Unauthorized"));
+  const session = await auth.api.getSession({ headers: req.headers as unknown as Headers });
+  if (!session) {
+    return next(new AppError(401, "Unauthorized"));
+  }
+  if (session.user.mustChangePassword && req.path !== "/auth/change-password") {
+    return next(new AppError(403, "PASSWORD_CHANGE_REQUIRED"));
+  }
+  req.identity = session.user;
+  next();
 }
