@@ -29,7 +29,7 @@ export function LoginPage() {
       callbackURL: "/",
     });
     if (result.error) {
-      setError(result.error.message ?? "Sign in failed");
+      setError("Invalid email or password");
     } else {
       navigate("/");
     }

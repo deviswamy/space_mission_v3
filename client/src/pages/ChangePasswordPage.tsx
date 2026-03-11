@@ -1,8 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useLocation } from "wouter";
-import { ChangePasswordSchema, type ChangePasswordInput } from "../../../shared/contracts";
+import { z } from "zod";
+import { ChangePasswordSchema } from "../../../shared/contracts";
 import { useChangePassword } from "../hooks/useChangePassword";
+
+const FormSchema = ChangePasswordSchema.extend({
+  confirmPassword: z.string(),
+}).refine((d) => d.newPassword === d.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
+});
+type FormInput = z.infer<typeof FormSchema>;
 
 export function ChangePasswordPage() {
   const [, navigate] = useLocation();
@@ -12,9 +21,9 @@ export function ChangePasswordPage() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ChangePasswordInput>({ resolver: zodResolver(ChangePasswordSchema) });
+  } = useForm<FormInput>({ resolver: zodResolver(FormSchema) });
 
-  async function onSubmit(data: ChangePasswordInput) {
+  async function onSubmit(data: FormInput) {
     try {
       await changePassword(data.newPassword);
       navigate("/");
@@ -43,6 +52,20 @@ export function ChangePasswordPage() {
             />
             {errors.newPassword && (
               <p className="mt-1 text-xs text-red-600">{errors.newPassword.message}</p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Confirm password
+            </label>
+            <input
+              {...register("confirmPassword")}
+              type="password"
+              autoComplete="new-password"
+              className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {errors.confirmPassword && (
+              <p className="mt-1 text-xs text-red-600">{errors.confirmPassword.message}</p>
             )}
           </div>
           {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
