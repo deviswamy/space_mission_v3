@@ -1,0 +1,31 @@
+on:
+  push:
+    branches: ["*"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    services:
+      postgres_test:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: mission_control_test
+          POSTGRES_USER: mission_user
+          POSTGRES_PASSWORD: mission_pass
+        ports: ["5433:5432"]
+        options: --health-cmd pg_isready --health-interval 5s --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with: { bun-version: "1.1" }
+      - run: bun install --frozen-lockfile
+      - run: bunx biome check .
+      - run: bun run typecheck
+      - run: bun test tests/unit/
+      - run: bun test tests/integration/
+        env:
+          NODE_ENV: test
+          DATABASE_URL_TEST: postgresql://mission_user:mission_pass@localhost:5433/mission_control_test
+          BETTER_AUTH_SECRET: ci-throwaway-secret

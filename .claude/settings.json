@@ -3,7 +3,9 @@
     "allow": [
       "Bash(~/.bun/bin/bun pm ls)",
       "Bash(find /Users/devithirumalaiswamy/auto_code/space_mission_v3 -type f \\\\\\(-name *.ts -o -name *.tsx \\\\\\))",
-      "WebSearch"
+      "WebSearch",
+      "Bash(gh repo:*)",
+      "Bash(gh label:*)"
     ],
     "deny": [
       "Read(./.entire/metadata/**)"
@@ -17,7 +19,10 @@
   "enabledMcpjsonServers": [
     "context7"
   ],
-  "enabledPlugins": {},
+  "enabledPlugins": {
+    "engineering-skills@claude-code-skills": true,
+    "pr-review-toolkit@claude-plugins-official": true
+  },
   "PostToolUse": [
     {
       "matcher": "Bash",

@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "exactOptionalPropertyTypes": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@mission/shared": ["../shared/index.ts"],
+      "@mission/shared/*": ["../shared/*"]
+    }
+  },
+  "include": ["./**/*.ts", "../shared/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

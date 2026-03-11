@@ -1,0 +1,24 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: mission_control
+      POSTGRES_USER: mission_user
+      POSTGRES_PASSWORD: mission_pass
+    ports: ["5432:5432"]
+    volumes: [postgres_data:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mission_user"]
+      interval: 5s
+      retries: 5
+
+  postgres_test:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: mission_control_test
+      POSTGRES_USER: mission_user
+      POSTGRES_PASSWORD: mission_pass
+    ports: ["5433:5432"] # no volume — resets on docker compose down
+
+volumes:
+  postgres_data:

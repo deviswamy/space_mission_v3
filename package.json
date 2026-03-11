@@ -1,0 +1,40 @@
+{
+  "name": "mission-control",
+  "private": true,
+  "workspaces": ["client", "server", "shared"],
+  "scripts": {
+    "dev": "bun run --parallel dev:server dev:client",
+    "dev:server": "bun --hot server/index.ts",
+    "dev:client": "bunx vite --config client/vite.config.ts",
+    "build": "bun run typecheck",
+    "build:client": "bunx vite build --config client/vite.config.ts",
+    "build:server": "bun build server/index.ts --target=bun --outdir=dist/server",
+    "typecheck": "bun run --parallel typecheck:shared typecheck:server typecheck:client",
+    "typecheck:shared": "bun run --cwd shared typecheck",
+    "typecheck:server": "bun run --cwd server typecheck",
+    "typecheck:client": "bun run --cwd client typecheck",
+    "lint": "bunx biome check .",
+    "lint:fix": "bunx biome check --apply .",
+    "biome:check": "bunx biome check --apply .",
+    "test": "bun test tests/",
+    "test:unit": "bun test tests/unit/",
+    "test:integration": "bun test tests/integration/",
+    "test:e2e": "bunx playwright test",
+    "test:watch": "bun test --watch tests/unit/",
+    "check": "bun run lint && bun run typecheck && bun run test:unit && bun run test:integration",
+    "db:generate": "bunx drizzle-kit generate",
+    "db:migrate": "bun server/db/migrate.ts",
+    "db:seed": "bun server/db/seed.ts",
+    "db:studio": "bunx drizzle-kit studio",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "prepare": "bun scripts/setup-hooks.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  },
+  "dependencies": {
+    "gcloud": "^0.37.2",
+    "yaml": "^2.8.2"
+  }
+}
