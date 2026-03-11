@@ -1,2 +1,8 @@
 .roughnotes.md
 node_modules
+.env.local
+dist
+build
+coverage
+logs
+*.logs

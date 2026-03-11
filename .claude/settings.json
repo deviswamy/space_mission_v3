@@ -2,10 +2,12 @@
   "permissions": {
     "allow": [
       "Bash(~/.bun/bin/bun pm ls)",
+      "Bash(cat ~/.claude/permissions/allowlist.sh)",
       "Bash(find /Users/devithirumalaiswamy/auto_code/space_mission_v3 -type f \\\\\\(-name *.ts -o -name *.tsx \\\\\\))",
       "WebSearch",
       "Bash(gh repo:*)",
-      "Bash(gh label:*)"
+      "Bash(gh label:*)",
+      "Bash(bun --version)"
     ],
     "deny": [
       "Read(./.entire/metadata/**)"

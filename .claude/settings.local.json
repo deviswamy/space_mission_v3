@@ -48,7 +48,12 @@
       "Bash(gh pr list --json number,title,url,headRefName)",
       "Bash(gh pr view 39 --json comments,reviews,reviewComments)",
       "Bash(gh pr view 72 --repo wh-ai-org/dialectica-apha-1 --json number,title,url,body,comments,reviews)",
-      "Bash(gh api repos/wh-ai-org/dialectica-apha-1/pulls/72/comments)"
+      "Bash(gh api repos/wh-ai-org/dialectica-apha-1/pulls/72/comments)",
+      "Bash(bun db:generate:*)",
+      "Bash(bun add:*)",
+      "Bash(docker compose:*)",
+      "Bash(bun:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []
