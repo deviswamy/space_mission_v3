@@ -9,7 +9,7 @@ type Role = NonNullable<User["role"]>;
 
 export function requireRole(...roles: Role[]) {
   return (req: Request, _res: Response, next: NextFunction): void => {
-    const role = req.identity?.role;
+    const role = req.identity?.role as Role | undefined;
     if (!role || !roles.includes(role)) {
       next(new AppError(403, "Forbidden"));
       return;

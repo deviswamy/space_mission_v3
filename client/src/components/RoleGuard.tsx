@@ -2,9 +2,9 @@
 // Renders null otherwise (or an optional fallback).
 
 import type { ReactNode } from "react";
-import type { User } from "../../../shared/schema/auth";
+import { authClient, type SessionUser } from "../lib/auth";
 
-type Role = NonNullable<User["role"]>;
+type Role = SessionUser["role"];
 
 interface RoleGuardProps {
   roles: Role[];
@@ -12,7 +12,9 @@ interface RoleGuardProps {
   fallback?: ReactNode;
 }
 
-export function RoleGuard({ children, fallback = null }: RoleGuardProps) {
-  // TODO: implement role check via authClient.useSession()
-  return <>{children ?? fallback}</>;
+export function RoleGuard({ roles, children, fallback = null }: RoleGuardProps) {
+  const { data: session } = authClient.useSession();
+  const role = (session?.user as SessionUser | undefined)?.role;
+  if (!role || !roles.includes(role)) return <>{fallback}</>;
+  return <>{children}</>;
 }
