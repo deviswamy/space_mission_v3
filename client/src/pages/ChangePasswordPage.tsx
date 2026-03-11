@@ -1,29 +1,25 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation } from "wouter";
 import { ChangePasswordSchema, type ChangePasswordInput } from "../../../shared/contracts";
-import { apiFetch } from "../lib/api";
+import { useChangePassword } from "../hooks/useChangePassword";
+
 export function ChangePasswordPage() {
   const [, navigate] = useLocation();
-  const [error, setError] = useState<string | null>(null);
+  const { changePassword, error, isPending } = useChangePassword();
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<ChangePasswordInput>({ resolver: zodResolver(ChangePasswordSchema) });
 
   async function onSubmit(data: ChangePasswordInput) {
-    setError(null);
     try {
-      await apiFetch("/auth/change-password", {
-        method: "POST",
-        body: JSON.stringify({ newPassword: data.newPassword }),
-      });
+      await changePassword(data.newPassword);
       navigate("/");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to change password");
+    } catch {
+      // error state is set by the hook
     }
   }
 
@@ -52,10 +48,10 @@ export function ChangePasswordPage() {
           {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isPending}
             className="w-full bg-blue-600 text-white rounded px-4 py-2 text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
           >
-            {isSubmitting ? "Saving…" : "Set password"}
+            {isPending ? "Saving…" : "Set password"}
           </button>
         </form>
       </div>

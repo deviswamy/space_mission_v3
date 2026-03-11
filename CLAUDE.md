@@ -19,6 +19,25 @@ Preferred communication style: Simple, everyday language.
 - `bun <file>` — not node/ts-node
 - Bun loads `.env` automatically — do not use dotenv
 
+## Frontend Conventions
+
+### API Calls — Custom Hooks
+
+Never call `apiFetch` directly inside a component. Always wrap it in a custom hook in `client/src/hooks/`.
+
+- Hook owns the `apiFetch` call, `error` state, and `isPending` state
+- Re-throw errors from the hook so the caller can react (e.g. skip navigation)
+- Use `finally` to always reset `isPending`
+- Component calls the hook, navigates on success, and reads `error` for display
+
+```ts
+// ✅ correct
+const { changePassword, error, isPending } = useChangePassword();
+
+// ❌ wrong — apiFetch called directly in component
+await apiFetch("/auth/change-password", { ... });
+```
+
 ## MVP feature set
 
 -  Multi-tenant (organization), authenticate users and authorize then based on their roles
